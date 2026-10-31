@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#392653"><title>Hitster Kids – Audio Edition</title>
+<style>
+:root{--ink:#302443;--plum:#392653;--lav:#eee7ff;--mint:#e3f6ec;--gold:#ffdf9c}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(145deg,#f6efff,#fff8ed 58%,#eaf8f1);font-family:-apple-system,BlinkMacSystemFont,system-ui,sans-serif;color:var(--ink)}
+main{max-width:700px;margin:auto;padding:calc(12px + env(safe-area-inset-top)) 13px calc(25px + env(safe-area-inset-bottom))}
+.hero{background:linear-gradient(130deg,#392653,#644a87);color:white;border-radius:24px;padding:21px;box-shadow:0 12px 28px #39265325}.kicker{font-size:10px;letter-spacing:2px;font-weight:850;opacity:.8}.hero h1{font-size:36px;margin:4px 0}.hero p{font-size:13px;margin:0;opacity:.85}
+.card{background:#ffffffed;border:1px solid #e8e0f2;border-radius:20px;padding:16px;margin:13px 0;box-shadow:0 6px 18px #3926530a}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.grow{flex:1}.pill{background:var(--mint);color:#24684f;border-radius:30px;padding:6px 10px;font-size:11px;font-weight:800}
+button,.filelabel{border:0;border-radius:14px;padding:14px 15px;font-size:14px;font-weight:800;cursor:pointer;display:inline-block;text-align:center}.primary{background:var(--plum);color:white}.soft{background:var(--lav);color:var(--ink)}.green{background:#267858;color:white}.red{background:#d92535;color:white}button:disabled{opacity:.4;cursor:not-allowed}
+.stage{background:linear-gradient(145deg,#f2edff,#fff0f5);border-radius:18px;padding:23px 14px;text-align:center;margin:12px 0}.icon{font-size:48px}.question{font-size:25px;font-weight:900;margin:7px}.muted{font-size:12px;line-height:1.5;color:#786e83}.audio{width:100%;margin:13px 0;accent-color:#493568}.answer{display:none;background:#fff8e7;border:1px solid #f0dba9;border-radius:15px;padding:15px;margin-top:12px;text-align:center}.answer.show{display:block}.year{font-size:35px;color:#98681d;font-weight:950}.actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}.notice{font-size:12px;line-height:1.55;background:#fff7e4;border:1px solid #f0dfb5;border-radius:13px;padding:12px}.progress{height:7px;background:#eee8f4;border-radius:20px;overflow:hidden;margin-top:10px}.progress span{display:block;height:100%;width:0;background:#a48bd4}.list{max-height:220px;overflow:auto;border:1px solid #eee7f2;border-radius:12px}.item{padding:8px 10px;border-bottom:1px solid #f1edf4;font-size:12px}.small{font-size:11px;color:#786e83}
+input[type=file]{display:none}
+</style></head><body><main>
+<header class="hero"><div class="kicker">♫ DAS MUSIK-RATESPIEL</div><h1>HITSTER KIDS 🎧</h1><p>Audio-only · kein Musikvideo · Lösung erst aufdecken</p></header>
+<section class="card">
+ <div class="row"><b class="grow">🎵 Eure Musikbibliothek</b><span class="pill" id="loaded">0 Lieder geladen</span></div>
+ <p class="muted">Wähle Audiodateien aus deiner eigenen Musikbibliothek aus. Die App spielt nur den Ton ab, ohne Cover oder Musikvideo. Die Dateien bleiben auf deinem Gerät.</p>
+ <label class="filelabel primary" for="files">＋ Kinderlieder auswählen</label><input id="files" type="file" accept="audio/*" multiple>
+ <p class="small">Tipp: Benenne Dateien möglichst „Titel - Interpret - Jahr.mp3“. Beispiel: „Hakuna Matata - König der Löwen - 1994.mp3“.</p>
+</section>
+<section class="card">
+ <div class="row"><b class="grow">🎲 Spielrunde</b><span class="pill" id="status">Bereit</span></div>
+ <div class="stage"><div class="icon">🎧</div><div class="question" id="question">Welches Lied ist das?</div><p class="muted" id="hint">Lieder laden und dann „Zufälliges Lied“ drücken.</p>
+ <audio id="audio" class="audio" controls playsinline hidden></audio>
+ <div class="muted" id="playhelp" hidden>Wenn die Wiedergabe nicht automatisch startet, tippe auf ▶ im Audioplayer.</div></div>
+ <div class="actions"><button class="primary" id="next" disabled>♫ Zufälliges Lied</button><button class="soft" id="reveal" disabled>Lösung aufdecken</button></div>
+ <div class="answer" id="answer"><div class="muted">DAS WAR ...</div><div style="font-size:22px;font-weight:900" id="title"></div><div class="muted" id="artist"></div><div class="year" id="year"></div></div>
+ <div class="actions" style="margin-top:11px"><button class="green" id="right" disabled>✓ Richtig einsortiert</button><button class="soft" id="skip" disabled>Weiter ohne Punkt</button></div>
+ <div class="row" style="justify-content:space-between;margin-top:13px"><b>⭐ Punkte: <span id="score">0</span></b><span class="muted" id="count">0 gespielt</span><button class="soft" id="reset">Neue Runde</button></div>
+ <div class="progress"><span id="bar"></span></div>
+</section>
+<section class="card"><b>🕰️ Eure Zeitlinie</b><p class="muted">Richtig einsortierte Songs erscheinen hier chronologisch.</p><div id="timeline" class="muted">Noch keine Lieder eingeordnet.</div></section>
+<section class="card"><details><summary>🎼 Geladene Lieder anzeigen</summary><p class="muted">Diese Liste ist für die Spielleitung gedacht.</p><div id="list" class="list"></div></details></section>
+<section class="card"><div class="notice"><b>Wichtig:</b> Diese Audio-Version verbindet sich nicht direkt mit Spotify. Spotify Premium erlaubt nicht, Spotify-Musik beliebig in ein eigenes Musikquiz einzubetten. Nutze nur Audiodateien, die du rechtmäßig verwenden darfst. Auf iPhone/iPad kann die Auswahl über „Dateien“ erfolgen. Die Lieder werden nur für die aktuelle Sitzung geladen; nach Neuladen bitte erneut auswählen.</div></section>
+<footer class="small" style="text-align:center;padding:12px">Privates DIY-Spiel · nicht mit HITSTER, Spotify oder Disney verbunden.</footer>
+</main>
+<script>
+let tracks=[],played=new Set(),current=null,score=0,timeline=[];
+const $=id=>document.getElementById(id);
+function parseName(name){let base=name.replace(/\.[^.]+$/,'');let parts=base.split(/\s+-\s+/);return {title:parts[0]||base,artist:parts[1]||'Interpret unbekannt',year:(parts[2]||'').match(/\d{4}/)?.[0]||'Jahr unbekannt'};}
+function update(){ $('loaded').textContent=tracks.length+' Lieder geladen';$('count').textContent=played.size+' / '+tracks.length+' gespielt';$('bar').style.width=(tracks.length?played.size/tracks.length*100:0)+'%';$('status').textContent=tracks.length?(played.size===tracks.length?'Alle gespielt':'Im Spiel'):'Bereit';$('next').disabled=!tracks.length||played.size===tracks.length;}
+$('files').addEventListener('change',e=>{for(const f of e.target.files){if(!f.type.startsWith('audio/'))continue;const meta=parseName(f.name);tracks.push({...meta,file:f,url:URL.createObjectURL(f)});} $('list').innerHTML=tracks.map((t,i)=>`<div class="item">${i+1}. ${t.title} – ${t.artist} (${t.year})</div>`).join('');update();$('hint').textContent='Super! Jetzt könnt ihr losspielen.';});
+function next(){if(!tracks.length||played.size===tracks.length)return;const pool=tracks.map((t,i)=>i).filter(i=>!played.has(i));current=pool[Math.floor(Math.random()*pool.length)];played.add(current);const t=tracks[current];$('audio').pause();$('audio').src=t.url;$('audio').hidden=false;$('playhelp').hidden=false;$('audio').load();$('audio').play().catch(()=>{});$('question').textContent='Welches Lied ist das?';$('hint').textContent='Hört nur zu. Titel und Interpret bleiben geheim.';$('title').textContent=t.title;$('artist').textContent=t.artist;$('year').textContent=t.year;$('answer').classList.remove('show');$('reveal').disabled=false;$('right').disabled=true;$('skip').disabled=false;update();}
+function reveal(){if(current===null)return;$('answer').classList.add('show');$('reveal').disabled=true;$('right').disabled=false;}
+function finish(add){if(current===null)return;const t=tracks[current];if(add){score++;$('score').textContent=score;timeline.push(t);timeline.sort((a,b)=>(parseInt(a.year)||9999)-(parseInt(b.year)||9999));$('timeline').innerHTML=timeline.map(x=>`<span style="display:inline-block;background:#fff;border:1px solid #e8e0f2;border-radius:10px;padding:7px;margin:3px"><b>${x.year}</b><br>${x.title}</span>`).join('');}$('audio').pause();$('audio').hidden=true;$('audio').removeAttribute('src');current=null;$('reveal').disabled=true;$('right').disabled=true;$('skip').disabled=true;$('question').textContent=add?'Punkt gesammelt!':'Weiter geht’s!';$('hint').textContent='Bereit für das nächste Lied?';update();}
+$('next').onclick=next;$('reveal').onclick=reveal;$('right').onclick=()=>finish(true);$('skip').onclick=()=>finish(false);
+$('reset').onclick=()=>{current=null;played.clear();score=0;timeline=[];$('score').textContent='0';$('timeline').textContent='Noch keine Lieder eingeordnet.';$('answer').classList.remove('show');$('audio').pause();$('audio').hidden=true;$('audio').removeAttribute('src');$('question').textContent='Welches Lied ist das?';$('hint').textContent='Neue Runde bereit.';$('reveal').disabled=true;$('right').disabled=true;$('skip').disabled=true;update();};
+</script></body></html>
